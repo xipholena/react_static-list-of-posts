@@ -1,0 +1,121 @@
+// {...nestedObject}, ...nestedArray
+export function CommentList(...allComments) {
+  // Поскольку allComments - это массив с двумя вложенными объектами - хз почему,но первый - тот, что нужен, второй - пустой объект
+  /* console.log(allComments[0]); */
+  // Поскольку allComments[0] - это объект с объектами, нужно его перебрать и добавить вложенные объекты в массив, чтобы потом перебрать методом map
+  // Узнаём количество комментариев к посту === количеству итераций
+  const iterations = Object.keys(allComments[0]).length;
+  const commentsArray = [];
+
+  // теоретически можно было использовать for in, но...
+  for (let i = 0; i < iterations; i++) { // Unary operator '++' used no-plusplus
+    commentsArray.push(allComments[0][i]);
+  }
+
+  // console.log(commentsArray);
+
+  return (
+    <ul className="comments">
+      {commentsArray.map(comment => (
+        <li
+          key={comment.id}
+          className="comments__comment"
+        >
+          <Comment {...comment} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export const PostListType = PropTypes.arrayOf(
+    PropTypes.shape({
+      author: PropTypes.shape({
+        adress: PropTypes.shape({
+          city: PropTypes.string.isRequired,
+          geo: PropTypes.shape({
+            lat: PropTypes.string.isRequired,
+            lng: PropTypes.string.isRequired,
+          }),
+          street: PropTypes.string.isRequired,
+          suite: PropTypes.string.isRequired,
+          zipcode: PropTypes.string.isRequired,
+        }),
+        company: PropTypes.shape({
+          bs: PropTypes.string.isRequired,
+          catchPhrase: PropTypes.string.isRequired,
+          name: PropTypes.string.isRequired,
+        }),
+        email: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        phone: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
+        website: PropTypes.string.isRequired,
+      }),
+      comments: PropTypes.arrayOf(
+        PropTypes.shape({
+          body: PropTypes.string.isRequired,
+          email: PropTypes.string.isRequired,
+          id: PropTypes.number.isRequired,
+          name: PropTypes.string.isRequired,
+          postId: PropTypes.number.isRequired,
+        }),
+      ),
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      userId: PropTypes.number.isRequired,
+    })
+  )
+
+После разворачивания и до удаления неиспользуемых типов:
+/* export const Geotype = PropTypes.shape({
+  lat: PropTypes.string.isRequired,
+  lng: PropTypes.string.isRequired,
+}); */
+
+/* export const CompanyType = PropTypes.shape({
+  bs: PropTypes.string.isRequired,
+  catchPhrase: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+}); */
+
+/* export const AdressType = PropTypes.shape({
+  city: PropTypes.string.isRequired,
+  geo: Geotype.isRequired,
+  street: PropTypes.string.isRequired,
+  suite: PropTypes.string.isRequired,
+  zipcode: PropTypes.string.isRequired,
+}); */
+
+export const CommentType = PropTypes.shape({ //
+  body: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  postId: PropTypes.number.isRequired,
+});
+
+// export const CommentsType = PropTypes.arrayOf(CommentType);
+
+export const AuthorType = PropTypes.shape({ //
+  // adress: AdressType.isRequired,
+  // company: CompanyType.isRequired,
+  email: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  phone: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  website: PropTypes.string.isRequired,
+});
+
+export const PostsType = PropTypes.shape({ //
+  author: AuthorType.isRequired,
+  // comments: CommentsType.isRequired,
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  userId: PropTypes.number.isRequired,
+});
+
+export const PostListType = PropTypes.arrayOf(PostsType); //
+
